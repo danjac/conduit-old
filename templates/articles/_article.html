@@ -3,7 +3,7 @@
     <div class="">
       <div class="mb-1">
         <a class="font-semibold text-lg text-blue-800 hover:text-blue-600"
-           href="{% url 'articles:author' article.author.username %}">{{ article.author }}</a>
+           href="{{ article.author.get_absolute_url }}">{{ article.author }}</a>
       </div>
       <div class="text-gray-500 text-sm">{{ article.created|date }}</div>
     </div>

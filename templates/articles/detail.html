@@ -11,7 +11,7 @@
     <div class="mr-6">
       <div class="mb-1">
         <a class="font-semibold text-lg hover:text-gray-100"
-           href="{% url 'articles:author' article.author.username %}">{{ article.author }}</a>
+           href="{{ article.author.get_absolute_url }}">{{ article.author }}</a>
       </div>
       <div class="text-sm">{{ article.created|date }}</div>
     </div>
@@ -93,7 +93,7 @@
 
       <div class="bg-gray-100 p-3 flex items-center justify-between">
         <div class="flex items-center">
-          <a href=""
+          <a href="{{ comment.author.get_absolute_url }}"
              class="mr-2 text-blue-800 hover:text-blue-600">{{ comment.author }}</a>
           <span class="text-sm text-gray-600">
             {{ comment.created|date }}

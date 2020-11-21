@@ -1,6 +1,5 @@
 # Django
 from django.contrib import messages
-from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
@@ -36,23 +35,6 @@ def article_index(request):
             "tags": tags,
             "selected_tag": selected_tag,
         },
-    )
-
-
-def article_author_index(request, username):
-
-    author = get_object_or_404(get_user_model(), username=username)
-
-    articles = (
-        Article.objects.filter(author=author)
-        .select_related("author")
-        .order_by("-created")
-    )
-
-    return TemplateResponse(
-        request,
-        "articles/author.html",
-        {"articles": paginate(request, articles), "author": author},
     )
 
 

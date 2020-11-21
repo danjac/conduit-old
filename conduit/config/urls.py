@@ -5,9 +5,9 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
 
-
 urlpatterns = [
     path("", include("conduit.articles.urls")),
+    path("users/", include("conduit.users.urls")),
     path("account/", include("allauth.urls")),
     path(settings.ADMIN_URL, admin.site.urls),
 ]

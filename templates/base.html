@@ -1,4 +1,3 @@
-
 {% spaceless %}
 
 {% load static %}
@@ -43,28 +42,32 @@
       {% if user.is_authenticated %}
       <div>
         <a href="{% url 'articles:create' %}"
-           class="inline-block mr-2 hover:underline">
+           class="inline-block mr-3">
+          <i class="fa fa-pen mr-1"></i>
           New Article
         </a>
 
         <a href="/"
-           class="inline-block mr-2 hover:underline">
+           class="inline-block mr-3">
+          <i class="fa fa-cog mr-1"></i>
           Settings
         </a>
         <a href="{% url 'account_logout' %}"
-           class="inline-block hover:underline"
+           class="inline-block"
            role="button"
            data-turbolinks="false"
            data-controller="ajax"
            data-action="ajax#post"
-           data-ajax-redirect="/">{% trans "Logout" %}</a>
+           data-ajax-redirect="/">
+          {% trans "Logout" %}
+        </a>
       </div>
       {% else %}
       <div>
         <a href="{% url 'account_login' %}"
-           class="inline-block  hover:underline mr-2">{% trans "Login" %}</a>
+           class="inline-block mr-3">{% trans "Login" %}</a>
         <a href="{% url 'account_signup' %}"
-           class="inline-block  hover:underline">{% trans "Signup" %}</a>
+           class="inline-block">{% trans "Signup" %}</a>
       </div>
       {% endif %}
     </div>

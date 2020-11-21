@@ -28,14 +28,6 @@ class TestArticleIndex:
         assert response.context["articles"].object_list[0] == article
 
 
-class TestArticleAuthorIndex:
-    def test_get(self, client, user):
-        ArticleFactory.create_batch(6, author=user)
-        response = client.get(reverse("articles:author", args=[user.username]))
-        assert response.status_code == 200
-        assert len(response.context["articles"].object_list) == 6
-
-
 class TestCreateArticle:
     def test_post(self, client, login_user):
         response = client.post(

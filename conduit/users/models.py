@@ -1,8 +1,10 @@
 # Django
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+# Third Party Libraries
 from sorl.thumbnail import ImageField
 
 
@@ -46,12 +48,7 @@ class UserManager(BaseUserManager.from_queryset(UserQuerySet)):
 
     def create_superuser(self, username, email, password, **kwargs):
         return self.create_user(
-            username,
-            email,
-            password,
-            is_staff=True,
-            is_superuser=True,
-            **kwargs,
+            username, email, password, is_staff=True, is_superuser=True, **kwargs,
         )
 
 
@@ -62,7 +59,7 @@ class User(AbstractUser):
     image = ImageField(null=True, blank=True)
 
     follows = models.ManyToManyField(
-        "self", related_name="followed_by", symmetrical=False, blank=True
+        "self", related_name="followers", symmetrical=False, blank=True
     )
 
     # favorites = models.ManyToManyField(
@@ -70,6 +67,12 @@ class User(AbstractUser):
     # )
 
     objects = UserManager()
+
+    def __str__(self):
+        return self.username
+
+    def get_absolute_url(self):
+        return reverse("users:detail", args=[self.username])
 
     def get_email_addresses(self):
         """Get set of emails belonging to user.

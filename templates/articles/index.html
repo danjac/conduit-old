@@ -20,13 +20,13 @@
 
   <div class="hidden md:block col-span-1">
     <h2 class="text-lg mb-3 font-semibold">Popular tags</h2>
-    <div class="word-break p-3 rounded border">
+    <div class="p-3 rounded border">
       {% for tag in tags %}
       {% if tag.name == selected_tag %}
-      <span class="px-4 py-1 bg-indigo-800 text-white rounded mr-2">#{{ tag }}</span>
+      <span class="inline-block px-4 py-1 bg-indigo-800 text-white rounded mr-2 mb-1">#{{ tag }}</span>
       {% else %}
       <a href="{{ request.path }}?tag={{ tag.name }}"
-         class="px-4 py-1 bg-gray-100 rounded mr-2">#{{ tag }}</a>
+         class="inline-block px-4 py-1 bg-gray-100 rounded mr-2 mb-1">#{{ tag }}</a>
       {% endif %}
       {% endfor %}
     </div>
