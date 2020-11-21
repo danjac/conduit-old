@@ -6,6 +6,8 @@ from django.http import HttpResponse
 # Third Party Libraries
 import pytest
 
+# Conduit
+from conduit.articles.factories import ArticleFactory, CommentFactory
 from conduit.users.factories import UserFactory
 
 
@@ -38,3 +40,12 @@ def login_user(client):
     client.login(username=user.username, password=password)
     return user
 
+
+@pytest.fixture
+def article(user):
+    return ArticleFactory(author=user)
+
+
+@pytest.fixture
+def comment(article, user):
+    return CommentFactory(article=article, author=user)
