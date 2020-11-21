@@ -18,11 +18,18 @@
     {% include "_pagination.html" with page_obj=articles %}
   </div>
 
-  <div class="hidden md:block col-span-1 word-break">
-    {% for tag in tags %}
-    <a href=""
-       class="px-4 py-1 bg-gray-100 rounded mr-2">#{{ tag }}</a>
-    {% endfor %}
+  <div class="hidden md:block col-span-1">
+    <h2 class="text-lg mb-3 font-semibold">Popular tags</h2>
+    <div class="word-break p-3 rounded border">
+      {% for tag in tags %}
+      {% if tag.name == selected_tag %}
+      <span class="px-4 py-1 bg-indigo-800 text-white rounded mr-2">#{{ tag }}</span>
+      {% else %}
+      <a href="{{ request.path }}?tag={{ tag.name }}"
+         class="px-4 py-1 bg-gray-100 rounded mr-2">#{{ tag }}</a>
+      {% endif %}
+      {% endfor %}
+    </div>
   </div>
 
 </div>

@@ -23,10 +23,19 @@ def article_index(request):
     articles = Article.objects.select_related("author").order_by("-created")
     tags = Tag.objects.all()
 
+    selected_tag = request.GET.get("tag", None)
+
+    if selected_tag:
+        articles = articles.filter(tags__name__in=[selected_tag])
+
     return TemplateResponse(
         request,
         "articles/index.html",
-        {"articles": paginate(request, articles), "tags": tags},
+        {
+            "articles": paginate(request, articles),
+            "tags": tags,
+            "selected_tag": selected_tag,
+        },
     )
 
 

@@ -18,6 +18,15 @@ class TestArticleIndex:
         assert response.status_code == 200
         assert len(response.context["articles"].object_list) == 6
 
+    def test_get_with_selected_tag(self, client):
+        article = ArticleFactory()
+        article.tags.add("red", "green", "blue")
+        ArticleFactory.create_batch(5)
+        response = client.get(reverse("articles:index"), {"tag": "green"})
+        assert response.status_code == 200
+        assert len(response.context["articles"].object_list) == 1
+        assert response.context["articles"].object_list[0] == article
+
 
 class TestArticleAuthorIndex:
     def test_get(self, client, user):
