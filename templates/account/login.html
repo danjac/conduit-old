@@ -1,0 +1,49 @@
+{% extends "account/base.html" %}
+{% load widget_tweaks %}
+
+{% block head_title %}Sign In{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center">
+  <div class="w-full lg:w-2/3">
+    <h1 class="text-3xl mb-3">Sign In</h1>
+
+    <p class="mb-3"> <a class="text-blue-800 hover:text-blue-600"
+         href="{{ signup_url }}">Need an account ?</a></p>
+
+
+    <form id="login_form"
+          class="p-3 rounded border bg-white mb-3"
+          method="post"
+          action="{% url 'account_login' %}">
+      {% include "_form_errors.html" with errors=form.non_field_errors %}
+      {% csrf_token %}
+      {% with WIDGET_ERROR_CLASS="text-red-800" widget_class="appearance-none text-lg rounded p-3 border w-full" %}
+      <div class="mb-3">
+        {% render_field form.login class=widget_class %}
+        {% include "_form_errors.html" with errors=form.login.errors %}
+      </div>
+      <div class="mb-3">
+        {% render_field form.password class=widget_class %}
+        {% include "_form_errors.html" with errors=form.password.errors %}
+      </div>
+      <div class="mb-3">
+        <label class="text-lg">
+          Remember me
+          {% render_field form.remember class="ml-3" %}
+        </label>
+      </div>
+      {% endwith %}
+      {% if redirect_field_value %}
+      <input type="hidden"
+             name="{{ redirect_field_name }}"
+             value="{{ redirect_field_value }}" />
+      {% endif %}
+      <button type="submit"
+              class="px-4 py-2 rounded bg-blue-800 text-white hover:bg-blue-600">Sign In</button>
+    </form>
+
+  </div>
+</div>
+
+{% endblock content %}

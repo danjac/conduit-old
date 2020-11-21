@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="flex justify-center items-center">
+  <div class="w-full lg:w-2/3">
+
+    <form data-controller="form"
+          data-action="form#submit"
+          class="rounded border bg-white mb-3"
+          method="post"
+          action="{{ request.path }}">
+      {% include "_form_errors.html" with errors=form.non_field_errors %}
+      {% csrf_token %}
+      {% with WIDGET_ERROR_CLASS="text-red-800" widget_class="appearance-none text-lg rounded p-3 border w-full" %}
+      <div class="p-3 mb-3">
+        <div class="mb-3">
+          {% render_field form.title class=widget_class placeholder=form.title.label %}
+          {% include "_form_errors.html" with errors=form.title.errors %}
+        </div>
+        <div class="mb-3">
+          {% render_field form.description class=widget_class placeholder=form.description.label %}
+          {% include "_form_errors.html" with errors=form.description.errors %}
+        </div>
+        <div class="mb-3">
+          {% render_field form.body class=widget_class placeholder=form.body.label %}
+          {% include "_form_errors.html" with errors=form.body.errors %}
+        </div>
+        <div>
+          <div class="flex items-center">
+            <div class="font-semibold text-gray-500 text-lg mr-1">http://example.com/</div>
+            {% render_field form.slug class=widget_class placeholder=form.slug.label %}
+          </div>
+          {% include "_form_errors.html" with errors=form.slug.errors %}
+        </div>
+      </div>
+
+      {% endwith %}
+      <div class="flex bg-gray-100 rounded-b-lg border border-t-none p-3 justify-end">
+        <button type="submit"
+                class="px-4 py-2 rounded bg-blue-800 text-white hover:bg-blue-600">Publish Article</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

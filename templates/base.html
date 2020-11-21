@@ -1,0 +1,87 @@
+
+{% spaceless %}
+
+{% load static %}
+{% load i18n %}
+
+{% endspaceless %}
+
+<!DOCTYPE html>
+{% get_current_language as language_code %}
+<html lang="{{ language_code }}">
+
+<head>
+  <title>
+    {% spaceless %}{% block title %}Conduit{% endblock %}{% endspaceless %}
+  </title>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="turbolinks-cache-control"
+        content="no-cache">
+  <meta name="copyright"
+        content="Dan Jacob {% now "Y" %}">
+  <meta name="robots"
+        content="index,follow">
+
+  {% include "_static.html" %}
+  {% include "_fontawesome.html" %}
+
+</head>
+
+<body class="h-screen container-lg mx-auto antialiased bg-white">
+
+
+  {% block header %}
+
+  <header class="border-b pb-1 bg-gray-100">
+    <div class="flex items-center justify-between p-2 md:px-12">
+      <div class="flex items-center flex-shrink-0 mr-6 text-xl">
+        <a class="text-indigo-900 font-bold" href="{% url 'articles:index' %}">Conduit</a>
+      </div>
+
+      {% if user.is_authenticated %}
+      <div>
+        <a href="{% url 'articles:create' %}"
+           class="inline-block mr-2 hover:underline">
+          New Article
+        </a>
+
+        <a href="/"
+           class="inline-block mr-2 hover:underline">
+          Settings
+        </a>
+        <a href="{% url 'account_logout' %}"
+           class="inline-block hover:underline"
+           role="button"
+           data-turbolinks="false"
+           data-controller="ajax"
+           data-action="ajax#post"
+           data-ajax-redirect="/">{% trans "Logout" %}</a>
+      </div>
+      {% else %}
+      <div>
+        <a href="{% url 'account_login' %}"
+           class="inline-block  hover:underline mr-2">{% trans "Login" %}</a>
+        <a href="{% url 'account_signup' %}"
+           class="inline-block  hover:underline">{% trans "Signup" %}</a>
+      </div>
+      {% endif %}
+    </div>
+
+  </header>
+  {% endblock header %}
+
+  {% include "_messages.html" %}
+  {% include "_cookie_notice.html" %}
+
+  <div class="min-h-full mx-auto p-2 pt-6 md:px-12 bg-white">
+    {% block content %}{% endblock %}
+  </div>
+  {% include "_footer.html" %}
+
+</body>
+
+</html>
+
+

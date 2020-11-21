@@ -1,0 +1,46 @@
+{% extends "account/base.html" %}
+{% load widget_tweaks %}
+{% block head_title %}Signup{% endblock %}
+{% block content %}
+<div class="flex justify-center items-center">
+  <div class="w-full lg:w-2/3">
+    <h1 class="text-3xl mb-3">Sign Up</h1>
+
+    <form id="signup_form"
+          class="p-3 rounded border bg-white mb-3 border"
+          method="post"
+          action="{% url 'account_signup' %}">
+      {% include "_form_errors.html" with errors=form.non_field_errors %}
+      {% csrf_token %}
+      {% with WIDGET_ERROR_CLASS="text-red-800 border-red-800" widget_class="appearance-none text-lg rounded p-3 border w-full" %}
+      <div class="mb-3">
+        {% render_field form.email class=widget_class %}
+        {% include "_form_errors.html" with errors=form.email.errors %}
+      </div>
+      <div class="mb-3">
+        {% render_field form.username class=widget_class %}
+        {% include "_form_errors.html" with errors=form.username.errors %}
+      </div>
+      <div class="mb-3">
+        {% render_field form.password1 class=widget_class %}
+        {% include "_form_errors.html" with errors=form.password1.errors %}
+      </div>
+      <div class="mb-3">
+        {% render_field form.password2 class=widget_class %}
+        {% include "_form_errors.html" with errors=form.password2.errors %}
+      </div>
+      {% endwith %}
+      {% if redirect_field_value %}
+      <input type="hidden"
+             name="{{ redirect_field_name }}"
+             value="{{ redirect_field_value }}" />
+      {% endif %}
+      <button type="submit"
+              class="px-4 py-2 rounded bg-blue-800 text-white hover:bg-blue-600">Sign Up</button>
+    </form>
+
+    <p>Already have an account? Then please <a class="text-blue-800 hover:text-blue-600" href="{{ login_url }}">sign in</a></p>
+
+  </div>
+</div>
+{% endblock %}
