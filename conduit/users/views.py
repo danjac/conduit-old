@@ -24,6 +24,8 @@ def user_detail(request, username):
 
     articles = (
         Article.objects.filter(author=user)
+        .with_num_likes()
+        .with_is_liked(request.user)
         .select_related("author")
         .order_by("-created")
     )
@@ -42,9 +44,9 @@ def user_detail(request, username):
 
 @login_required
 @require_POST
-def follow(request, pk):
+def follow(request, user_id):
     user = get_object_or_404(
-        get_user_model().objects.exclude(pk=request.user.id), pk=pk
+        get_user_model().objects.exclude(pk=request.user.id), pk=user_id
     )
     request.user.follows.add(user)
     messages.success(request, f"You are now following {user}")
@@ -53,8 +55,8 @@ def follow(request, pk):
 
 @login_required
 @require_POST
-def unfollow(request, pk):
-    user = get_object_or_404(request.user.follows.all(), pk=pk)
+def unfollow(request, user_id):
+    user = get_object_or_404(request.user.follows.all(), pk=user_id)
     request.user.follows.remove(user)
     messages.info(request, f"You have stopped following {user}")
     return redirect(user)

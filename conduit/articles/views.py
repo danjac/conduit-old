@@ -19,7 +19,12 @@ from .models import Article, Comment
 def article_index(request):
     """Show list of articles"""
 
-    articles = Article.objects.select_related("author").order_by("-created")
+    articles = (
+        Article.objects.with_num_likes()
+        .with_is_liked(request.user)
+        .select_related("author")
+        .order_by("-created")
+    )
     tags = Tag.objects.all()
 
     selected_tag = request.GET.get("tag", None)
@@ -40,7 +45,12 @@ def article_index(request):
 
 def article_detail(request, slug):
 
-    article = get_object_or_404(Article.objects.select_related("author"), slug=slug)
+    article = get_object_or_404(
+        Article.objects.with_num_likes()
+        .with_is_liked(request.user)
+        .select_related("author"),
+        slug=slug,
+    )
 
     comment_form = None
 
@@ -64,7 +74,13 @@ def article_detail(request, slug):
         and article.author.followers.filter(pk=request.user.id).exists()
     )
 
-    can_follow = request.user.is_authenticated and request.user != article.author
+    can_follow = can_like = (
+        request.user.is_authenticated and request.user != article.author
+    )
+
+    can_follow = can_like = (
+        request.user.is_authenticated and request.user != article.author
+    )
 
     return TemplateResponse(
         request,
@@ -75,6 +91,7 @@ def article_detail(request, slug):
             "comments": paginate(request, comments),
             "is_following": is_following,
             "can_follow": can_follow,
+            "can_like": can_like,
         },
     )
 
@@ -94,6 +111,24 @@ def create_article(request):
     else:
         form = ArticleForm()
     return TemplateResponse(request, "articles/article_form.html", {"form": form})
+
+
+@login_required
+@require_POST
+def like_article(request, article_id):
+    article = get_object_or_404(
+        Article.objects.exclude(author=request.user), pk=article_id
+    )
+    request.user.likes.add(article)
+    return redirect(article)
+
+
+@login_required
+@require_POST
+def unlike_article(request, article_id):
+    article = get_object_or_404(request.user.likes.all(), pk=article_id)
+    request.user.likes.remove(article)
+    return redirect(article)
 
 
 @login_required

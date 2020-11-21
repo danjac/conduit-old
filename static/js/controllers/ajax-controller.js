@@ -3,8 +3,6 @@ import Turbolinks from 'turbolinks';
 import { Controller } from 'stimulus';
 
 export default class extends Controller {
-  static targets = ['replace', 'remove'];
-
   get(event) {
     event.preventDefault();
     this.dispatch('GET');
@@ -47,24 +45,6 @@ export default class extends Controller {
       return;
     }
 
-    if (this.data.has('replace')) {
-      if (this.hasReplaceTarget) {
-        this.replaceTarget.innerHTML = response.data;
-      } else {
-        this.element.innerHTML = response.data;
-      }
-      return;
-    }
-
-    if (this.data.has('remove')) {
-      if (this.hasRemoveTarget) {
-        this.removeTarget.remove();
-      } else {
-        this.element.remove();
-      }
-      return;
-    }
-    //
     // default behaviour: redirect passed down in header
     if (!redirect && response.headers['content-type'].match(/javascript/)) {
       /* eslint-disable-next-line no-eval */

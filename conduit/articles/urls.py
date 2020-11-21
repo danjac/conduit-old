@@ -12,5 +12,7 @@ urlpatterns = [
         "comments/<int:comment_id>/~delete", views.delete_comment, name="delete_comment"
     ),
     path("~submit/", views.create_article, name="create"),
+    path("<int:article_id>/~like/", views.like_article, name="like"),
+    path("<int:article_id>/~unlike/", views.unlike_article, name="unlike"),
     path("<slug:slug>/", views.article_detail, name="detail"),
 ]
