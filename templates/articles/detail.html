@@ -16,11 +16,27 @@
       <div class="text-sm">{{ article.created|date }}</div>
     </div>
 
+    {% if can_follow %}
     <div class="mr-6">
-      <button class="rounded px-4 py-2 border hover:bg-indigo-300">
+      {% if is_following %}
+      <button class="rounded px-4 py-2 border hover:bg-indigo-300"
+              data-controller="ajax"
+              data-action="ajax#post"
+              data-ajax-redirect="{{ request.path }}"
+              data-ajax-url="{% url 'users:unfollow' article.author.id %}">
+        <i class="fa fa-plus mr-1"></i> Unfollow {{ article.author }}
+      </button>
+      {% else %}
+      <button class="rounded px-4 py-2 border hover:bg-indigo-300"
+              data-controller="ajax"
+              data-action="ajax#post"
+              data-ajax-redirect="{{ request.path }}"
+              data-ajax-url="{% url 'users:follow' article.author.id %}">
         <i class="fa fa-plus mr-1"></i> Follow {{ article.author }}
       </button>
+      {% endif %}
     </div>
+    {% endif %}
 
     <div>
       <button class="rounded px-4 py-2 border hover:bg-indigo-300">
@@ -50,11 +66,28 @@
     <div class="text-gray-500 text-sm">{{ article.created|date }}</div>
   </div>
 
+  {% if can_follow %}
   <div class="mr-6">
-    <button class="rounded px-4 py-2 border hover:bg-gray-100">
+    {% if is_following %}
+    <button class="rounded px-4 py-2 border hover:bg-gray-100"
+            data-controller="ajax"
+            data-action="ajax#post"
+            data-ajax-redirect="{{ request.path }}"
+            data-ajax-url="{% url 'users:unfollow' article.author.id %}">
+      <i class="fa fa-plus mr-1"></i> Unfollow {{ article.author }}
+    </button>
+    {% else %}
+    <button class="rounded px-4 py-2 border hover:bg-gray-100"
+            data-controller="ajax"
+            data-action="ajax#post"
+            data-ajax-redirect="{{ request.path }}"
+            data-ajax-url="{% url 'users:follow' article.author.id %}">
       <i class="fa fa-plus mr-1"></i> Follow {{ article.author }}
     </button>
+    {% endif %}
   </div>
+  {% endif %}
+
 
   <div>
     <button class="rounded px-4 py-2 border hover:bg-gray-100">

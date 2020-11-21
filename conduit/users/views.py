@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
+from django.views.decorators.http import require_POST
 
 # Conduit
 from conduit.articles.models import Article
@@ -12,17 +13,17 @@ from conduit.common.pagination import paginate
 
 def user_detail(request, username):
 
-    author = get_object_or_404(get_user_model(), username=username)
+    user = get_object_or_404(get_user_model(), username=username)
 
     is_following = (
         request.user.is_authenticated
-        and author.followers.filter(pk=request.user.id).exists()
+        and user.followers.filter(pk=request.user.id).exists()
     )
 
-    can_follow = request.user.is_authenticated and request.user != author
+    can_follow = request.user.is_authenticated and request.user != user
 
     articles = (
-        Article.objects.filter(author=author)
+        Article.objects.filter(author=user)
         .select_related("author")
         .order_by("-created")
     )
@@ -31,15 +32,16 @@ def user_detail(request, username):
         request,
         "users/detail.html",
         {
-            "articles": paginate(request, articles),
-            "user_obj": author,
+            "user_obj": user,
             "can_follow": can_follow,
             "is_following": is_following,
+            "articles": paginate(request, articles),
         },
     )
 
 
 @login_required
+@require_POST
 def follow(request, pk):
     user = get_object_or_404(
         get_user_model().objects.exclude(pk=request.user.id), pk=pk
@@ -50,6 +52,7 @@ def follow(request, pk):
 
 
 @login_required
+@require_POST
 def unfollow(request, pk):
     user = get_object_or_404(request.user.follows.all(), pk=pk)
     request.user.follows.remove(user)

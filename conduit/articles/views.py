@@ -59,6 +59,13 @@ def article_detail(request, slug):
 
     comments = article.comment_set.select_related("author").order_by("-created")
 
+    is_following = (
+        request.user.is_authenticated
+        and article.author.followers.filter(pk=request.user.id).exists()
+    )
+
+    can_follow = request.user.is_authenticated and request.user != article.author
+
     return TemplateResponse(
         request,
         "articles/detail.html",
@@ -66,6 +73,8 @@ def article_detail(request, slug):
             "article": article,
             "comment_form": comment_form,
             "comments": paginate(request, comments),
+            "is_following": is_following,
+            "can_follow": can_follow,
         },
     )
 
