@@ -35,3 +35,7 @@ class TestUserUnfollow:
         response = client.post(reverse("users:unfollow", args=[user.id]))
         assert response.url == user.get_absolute_url()
         assert user not in login_user.follows.all()
+
+    def test_post_not_following(self, client, login_user, user):
+        response = client.post(reverse("users:unfollow", args=[user.id]))
+        assert response.status_code == 404
