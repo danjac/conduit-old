@@ -62,9 +62,9 @@ class User(AbstractUser):
         "self", related_name="followers", symmetrical=False, blank=True
     )
 
-    # favorites = models.ManyToManyField(
-    # "article.Article", related_name="favorited_by", blank=True
-    # )
+    likes = models.ManyToManyField(
+        "articles.Article", related_name="likers", blank=True
+    )
 
     objects = UserManager()
 
