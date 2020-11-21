@@ -36,11 +36,13 @@ class TestCreateArticle:
                 "title": "first post",
                 "body": " first",
                 "description": "first",
+                "tags": "test",
             },
         )
         assert response.url == reverse("articles:index")
         article = Article.objects.first()
         assert article.author == login_user
+        assert list(article.tags.names()) == ["test"]
 
 
 class TestDeleteComment:

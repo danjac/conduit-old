@@ -6,6 +6,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.views.decorators.http import require_POST
 
+# Third Party Libraries
+from taggit.models import Tag
+
 # Conduit
 from conduit.common.pagination import paginate
 
@@ -18,9 +21,12 @@ def article_index(request):
     """Show list of articles"""
 
     articles = Article.objects.select_related("author").order_by("-created")
+    tags = Tag.objects.all()
 
     return TemplateResponse(
-        request, "articles/index.html", {"articles": paginate(request, articles)}
+        request,
+        "articles/index.html",
+        {"articles": paginate(request, articles), "tags": tags},
     )
 
 
@@ -81,6 +87,8 @@ def create_article(request):
             article = form.save(commit=False)
             article.author = request.user
             article.save()
+            # save tags
+            form.save_m2m()
             messages.success(request, "Your article has been published!")
             return redirect("articles:index")
     else:

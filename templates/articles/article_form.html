@@ -26,6 +26,10 @@
           {% render_field form.body class=widget_class placeholder=form.body.label %}
           {% include "_form_errors.html" with errors=form.body.errors %}
         </div>
+        <div class="mb-3">
+          {% render_field form.tags class=widget_class placeholder=form.tags.label %}
+          {% include "_form_errors.html" with errors=form.tags.errors %}
+        </div>
         <div>
           <div class="flex items-center">
             <div class="font-semibold text-gray-500 text-lg mr-1">http://example.com/</div>

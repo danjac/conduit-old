@@ -7,6 +7,7 @@ from django.utils.safestring import mark_safe
 # Third Party Libraries
 import markdown
 from model_utils.models import TimeStampedModel
+from taggit.managers import TaggableManager
 
 
 class Article(TimeStampedModel):
@@ -16,7 +17,7 @@ class Article(TimeStampedModel):
     body = models.TextField()
 
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    # tags = TaggedField()
+    tags = TaggableManager()
 
     class Meta:
         indexes = [
