@@ -33,50 +33,56 @@
 
 </div>
 
-{% if comment_form %}
-<form data-controller="form"
-      data-action="form#submit"
-      method="post"
-      class="bg-gray-100 w-full mb-3"
-      action="{{ request.path }}">
-  {% csrf_token %}
-  {% with WIDGET_ERROR_CLASS="text-red-800" widget_class="appearance-none text-lg rounded-t-lg p-3 pb-0 border border-gray-300 w-full h-64" %}
-  <div class="mb-0">
-    {% render_field comment_form.body class=widget_class placeholder=comment_form.body.label %}
-    {% include "_form_errors.html" with errors=comment_form.body.errors %}
-  </div>
-  {% endwith %}
-  <div class="flex bg-gray-100 rounded-b-lg border border-t-none p-3 justify-end">
-    <button type="submit"
-            class="px-4 py-2 rounded bg-blue-800 text-white hover:bg-blue-600">Submit Comment</button>
-  </div>
-</form>
-{% endif %}
-{% for comment in comments.object_list %}
-<div class="border rounded mb-3">
-  <div class="p-3">{{ comment.as_markdown }}</div>
+<div class="flex justify-center">
+  <div class="w-full lg:w-3/4">
 
-  <div class="bg-gray-100 p-3 flex items-center justify-between">
-    <div class="flex items-center">
-      <a href=""
-         class="mr-2 text-blue-800 hover:text-blue-600">{{ comment.author }}</a>
-      <span class="text-sm text-gray-600">
-        {{ comment.created|date }}
-      </span>
-    </div>
-    {% if user == comment.author %}
-    <button class="hover:text-gray-500"
-            data-controller="ajax"
-            data-ajax-confirm="Are you sure you want to delete this comment?"
-            data-ajax-url="{% url 'articles:delete_comment' comment.id %}"
-            data-action="ajax#post">
-      <i class="fa fa-trash"></i>
-    </button>
+    {% if comment_form %}
+    <form data-controller="form"
+          data-action="form#submit"
+          method="post"
+          class="bg-gray-100 w-full mb-3"
+          action="{{ request.path }}">
+      {% csrf_token %}
+      {% with WIDGET_ERROR_CLASS="text-red-800" widget_class="appearance-none text-lg rounded-t-lg p-3 pb-0 border border-gray-300 w-full h-64" %}
+      <div class="mb-0">
+        {% render_field comment_form.body class=widget_class placeholder=comment_form.body.label %}
+        {% include "_form_errors.html" with errors=comment_form.body.errors %}
+      </div>
+      {% endwith %}
+      <div class="flex bg-gray-100 rounded-b-lg border border-t-none p-3 justify-end">
+        <button type="submit"
+                class="px-4 py-2 rounded bg-blue-800 text-white hover:bg-blue-600">Submit Comment</button>
+      </div>
+    </form>
     {% endif %}
 
-  </div>
+    {% for comment in comments.object_list %}
+    <div class="border rounded mb-3">
+      <div class="p-3">{{ comment.as_markdown }}</div>
 
+      <div class="bg-gray-100 p-3 flex items-center justify-between">
+        <div class="flex items-center">
+          <a href=""
+             class="mr-2 text-blue-800 hover:text-blue-600">{{ comment.author }}</a>
+          <span class="text-sm text-gray-600">
+            {{ comment.created|date }}
+          </span>
+        </div>
+        {% if user == comment.author %}
+        <button class="hover:text-gray-500"
+                data-controller="ajax"
+                data-ajax-confirm="Are you sure you want to delete this comment?"
+                data-ajax-url="{% url 'articles:delete_comment' comment.id %}"
+                data-action="ajax#post">
+          <i class="fa fa-trash"></i>
+        </button>
+        {% endif %}
+
+      </div>
+
+    </div>
+    {% endfor %}
+    {% include "_pagination.html" with page_obj=comments %}
+  </div>
 </div>
-{% endfor %}
-{% include "_pagination.html" with page_obj=comments %}
 {% endblock content %}
