@@ -12,36 +12,10 @@
 {% block content %}
 <div class="md:grid grid-cols-3 gap-4">
   <div class="col-span-2">
-    {% for article in page_obj.object_list %}
-    <div class="border-b pb-3 mb-3">
-
-      <div class="flex items-center justify-between mb-3">
-        <div class="">
-          <div class="mb-1">
-            <a class="font-semibold text-lg text-blue-800 hover:text-blue-600"
-               href="">{{ article.author }}</a>
-          </div>
-          <div class="text-gray-500 text-sm">{{ article.created|date }}</div>
-        </div>
-        <div>
-          <button class="rounded border p-2 text-sm">
-            <i class="fa fa-heart mr-1"></i> 3
-          </button>
-        </div>
-      </div>
-      <div class="mb-3">
-        <div class="text-xl font-bold mb-1">
-          {{ article.title }}
-        </div>
-        <div class="text-sm text-gray-500 mb-3">
-          {{ article.description|truncatechars:100 }}
-        </div>
-        <a href="{{ article.get_absolute_url }}"
-           class="text-sm text-blue-800 hover:text-blue-600">Read more...</a>
-      </div>
-    </div>
+    {% for article in articles.object_list %}
+    {% include "articles/_article.html" %}
     {% endfor %}
-    {% include "_pagination.html" %}
+    {% include "_pagination.html" with page_obj=articles %}
   </div>
 
   <div class="hidden md:block col-span-1">

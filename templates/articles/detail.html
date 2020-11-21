@@ -1,9 +1,40 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
+
+{% block header %}
+{{ block.super }}
+<div class="py-6 mx-auto md:px-12 mb-3 mx-auto bg-gradient-to-b from-indigo-900 to-indigo-700 text-white w-full">
+  <h1 class="text-2xl font-bold mb-3">{{ article.title }}</h1>
+  <h2 class="text-lg mb-3">{{ article.description }}</h2>
+  <div class="flex justify-center items-center mb-3">
+
+    <div class="mr-6">
+      <div class="mb-1">
+        <a class="font-semibold text-lg hover:text-gray-100"
+           href="{% url 'articles:author' article.author.username %}">{{ article.author }}</a>
+      </div>
+      <div class="text-sm">{{ article.created|date }}</div>
+    </div>
+
+    <div class="mr-6">
+      <button class="rounded px-4 py-2 border hover:bg-indigo-300">
+        <i class="fa fa-plus mr-1"></i> Follow {{ article.author }}
+      </button>
+    </div>
+
+    <div>
+      <button class="rounded px-4 py-2 border hover:bg-indigo-300">
+        <i class="fa fa-heart mr-1"></i> Favorite Article (1)
+      </button>
+    </div>
+
+  </div>
+
+</div>
+{% endblock header %}
+
 {% block content %}
 <div class="pb-6 border-b mb-3">
-  <h1 class="text-2xl font-bold mb-3">{{ article.title }}</h1>
-  <h2 class="text-lg text-gray-500 mb-3">{{ article.description }}</h2>
   <p>
     {{ article.as_markdown }}
   </p>

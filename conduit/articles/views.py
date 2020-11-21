@@ -20,7 +20,7 @@ def article_index(request):
     articles = Article.objects.select_related("author").order_by("-created")
 
     return TemplateResponse(
-        request, "articles/index.html", {"page_obj": paginate(request, articles)}
+        request, "articles/index.html", {"articles": paginate(request, articles)}
     )
 
 
@@ -37,7 +37,7 @@ def article_author_index(request, username):
     return TemplateResponse(
         request,
         "articles/author.html",
-        {"page_obj": paginate(request, articles), "author": author},
+        {"articles": paginate(request, articles), "author": author},
     )
 
 

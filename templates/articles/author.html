@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block header %}
+{{ block.super }}
+<div class="flex justify-center text-center items-center py-6 mb-3 mx-auto bg-gradient-to-b from-indigo-900 to-indigo-700 text-white w-full">
+  <div>
+    <h1 class="text-5xl mb-6">{{ author.username }}</h1>
+    <div class="">
+      <button class="rounded px-4 py-2 border hover:bg-indigo-300">
+        <i class="fa fa-plus mr-1"></i> Follow {{ article.author }}
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock header %}
+
+
+{% block content %}
+{% for article in articles.object_list %}
+{% include "articles/_article.html" %}
+{% endfor %}
+{% include "_pagination.html" with page_obj=articles %}
+{% endblock content %}
