@@ -1,6 +1,11 @@
+# Django
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from django.utils.safestring import mark_safe
+
+# Third Party Libraries
+import markdown
 from model_utils.models import TimeStampedModel
 
 
@@ -25,6 +30,9 @@ class Article(TimeStampedModel):
     def get_absolute_url(self):
         return reverse("articles:detail", args=[self.slug])
 
+    def as_markdown(self):
+        return mark_safe(markdown.markdown(self.body))
+
 
 class Comment(TimeStampedModel):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
@@ -36,3 +44,6 @@ class Comment(TimeStampedModel):
         indexes = [
             models.Index(fields=["created", "-created"]),
         ]
+
+    def as_markdown(self):
+        return mark_safe(markdown.markdown(self.body))

@@ -5,7 +5,7 @@
   <h1 class="text-2xl font-bold mb-3">{{ article.title }}</h1>
   <h2 class="text-lg text-gray-500 mb-3">{{ article.description }}</h2>
   <p>
-    {{ article.body }}
+    {{ article.as_markdown }}
   </p>
 </div>
 
@@ -54,7 +54,7 @@
 {% endif %}
 {% for comment in comments.object_list %}
 <div class="border rounded mb-3">
-  <p class="p-3">{{ comment.body }}</p>
+  <div class="p-3">{{ comment.as_markdown }}</div>
 
   <div class="bg-gray-100 p-3 flex items-center justify-between">
     <div class="flex items-center">
