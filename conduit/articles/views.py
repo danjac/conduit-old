@@ -1,13 +1,17 @@
+# Django
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
+from django.views.decorators.http import require_POST
 
+# Conduit
 from conduit.common.pagination import paginate
 
+# Local
 from .forms import ArticleForm, CommentForm
-from .models import Article
+from .models import Article, Comment
 
 
 def article_index(request):
@@ -82,3 +86,16 @@ def create_article(request):
     else:
         form = ArticleForm()
     return TemplateResponse(request, "articles/article_form.html", {"form": form})
+
+
+@login_required
+@require_POST
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(
+        Comment.objects.select_related("article", "author"),
+        author=request.user,
+        pk=comment_id,
+    )
+    comment.delete()
+    messages.info(request, "Your comment has been deleted")
+    return redirect(comment.article)

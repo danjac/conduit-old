@@ -26,6 +26,7 @@ pytest-django
 pytest-mock
 pytest-randomly
 pytest-xdist
+markdown
 pytz
 sorl-thumbnail
 redis
