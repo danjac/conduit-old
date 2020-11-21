@@ -8,17 +8,23 @@
       </div>
       <div class="text-gray-500 text-sm">{{ article.created|date }}</div>
     </div>
-    <div>
-      <button class="rounded border p-2 text-sm hover:bg-gray-100"
-              {% if user.is_authenticated and user != article.author %}
-              data-controller="ajax"
-              data-ajax-redirect="{{ request.path }}#article-{{ article.id }}"
-              data-ajax-url="{% if article.is_liked %}{% url 'articles:unlike' article.id %}{% else %}{% url 'articles:like' article.id %}{% endif %}"
-              data-action="ajax#post"
-              {% endif %}>
-        <i class="fa fa-heart mr-1"></i> {{ article.num_likes|default:0 }}
-      </button>
+
+    {% if request.user.is_authenticated and request.user != article.author %}
+    <button class="rounded border p-2 text-sm hover:bg-gray-100 focus:outline-none"
+            data-controller="ajax"
+            data-controller="ajax"
+            data-ajax-url="{% url 'articles:like' article.id %}"
+            data-ajax-replace
+            data-action="ajax#post">
+      <span data-target="ajax.fragment">
+        {% include "articles/_like.html" with num_likes=article.num_likes %}
+      </span>
+    </button>
+    {% else %}
+    <div class="rounded border p-2 text-sm">
+      {% include "articles/_like.html" with num_likes=article.num_likes %}
     </div>
+    {% endif %}
   </div>
   <div class="mb-3">
     <div class="text-xl font-bold mb-1">

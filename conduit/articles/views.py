@@ -119,15 +119,18 @@ def like_article(request, article_id):
     article = get_object_or_404(
         Article.objects.exclude(author=request.user), pk=article_id
     )
-    request.user.likes.add(article)
-    return redirect(article)
 
+    if request.user.likes.filter(pk=article_id).exists():
+        request.user.likes.remove(article)
+    else:
+        request.user.likes.add(article)
 
-@login_required
-@require_POST
-def unlike_article(request, article_id):
-    article = get_object_or_404(request.user.likes.all(), pk=article_id)
-    request.user.likes.remove(article)
+    if request.headers.get("X-Request-Fragment"):
+        return TemplateResponse(
+            request,
+            "articles/_like.html",
+            {"article": article, "num_likes": article.likers.count(),},
+        )
     return redirect(article)
 
 

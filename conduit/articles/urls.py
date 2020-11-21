@@ -13,6 +13,5 @@ urlpatterns = [
     ),
     path("~submit/", views.create_article, name="create"),
     path("<int:article_id>/~like/", views.like_article, name="like"),
-    path("<int:article_id>/~unlike/", views.unlike_article, name="unlike"),
     path("<slug:slug>/", views.article_detail, name="detail"),
 ]

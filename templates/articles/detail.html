@@ -43,7 +43,7 @@
               {% if can_like %}
               data-controller="ajax"
               data-action="ajax#post"
-              data-ajax-url="{% if article.is_liked %}{% url 'articles:unlike' article.id %}{% else %}{% url 'articles:like' article.id %}{% endif %}"
+              data-ajax-url="{% url 'articles:like' article.id %}"
               data-ajax-redirect="{{ request.path }}"{% endif %}>
         <i class="fa fa-heart mr-1"></i> Favorite Article ({{ article.num_likes }})
       </button>
@@ -98,7 +98,7 @@
             {% if can_like %}
             data-controller="ajax"
             data-action="ajax#post"
-            data-ajax-url="{% if article.is_liked %}{% url 'articles:unlike' article.id %}{% else %}{% url 'articles:like' article.id %}{% endif %}"
+            data-ajax-url="{% url 'articles:like' article.id %}"
             data-ajax-redirect="{{ request.path }}"{% endif %}>
       <i class="fa fa-heart mr-1"></i> Favorite Article ({{ article.num_likes }})
     </button>
