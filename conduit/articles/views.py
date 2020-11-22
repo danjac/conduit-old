@@ -16,7 +16,7 @@ from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
 
 
-def article_index(request):
+def article_index(request, follows=False):
     """Show list of articles"""
 
     articles = (
@@ -28,6 +28,8 @@ def article_index(request):
 
     if selected_tag:
         articles = articles.filter(tags__name__in=[selected_tag])
+    elif follows and request.user.is_authenticated:
+        articles = articles.filter(author__in=request.user.follows.all())
 
     return TemplateResponse(
         request,
@@ -35,6 +37,7 @@ def article_index(request):
         {
             "articles": paginate(request, articles),
             "tags": tags,
+            "follows": follows,
             "selected_tag": selected_tag,
         },
     )

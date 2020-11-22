@@ -8,6 +8,7 @@ app_name = "articles"
 
 urlpatterns = [
     path("", views.article_index, name="index"),
+    path("follows/", views.article_index, name="follows", kwargs={"follows": True}),
     path(
         "comments/<int:comment_id>/~delete", views.delete_comment, name="delete_comment"
     ),
