@@ -1,4 +1,5 @@
 # Django
+from django.conf import settings
 from django.urls import reverse
 
 # Third Party Libraries
@@ -16,6 +17,17 @@ class TestUserDetailIndex:
         response = client.get(reverse("users:detail", args=[user.username]))
         assert response.status_code == 200
         assert len(response.context["articles"].object_list) == 6
+
+
+class TestUserSettings:
+    def test_post(self, client, login_user):
+        response = client.post(
+            reverse("users:settings"),
+            {"name": "Test user", "bio": "test", "avatar": ""},
+        )
+        assert response.url == settings.HOME_URL
+        login_user.refresh_from_db()
+        assert login_user.name == "Test user"
 
 
 class TestUserFollow:

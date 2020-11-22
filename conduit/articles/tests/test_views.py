@@ -11,6 +11,17 @@ from ..models import Article, Comment
 pytestmark = pytest.mark.django_db
 
 
+@pytest.fixture
+def article_post_data():
+    return {
+        "slug": "first-post",
+        "title": "first post",
+        "body": " first",
+        "description": "first",
+        "tags": "test",
+    }
+
+
 class TestArticleIndex:
     def test_get(self, client):
         ArticleFactory.create_batch(6)
@@ -29,17 +40,8 @@ class TestArticleIndex:
 
 
 class TestCreateArticle:
-    def test_post(self, client, login_user):
-        response = client.post(
-            reverse("articles:create"),
-            {
-                "slug": "first-post",
-                "title": "first post",
-                "body": " first",
-                "description": "first",
-                "tags": "test",
-            },
-        )
+    def test_post(self, client, login_user, article_post_data):
+        response = client.post(reverse("articles:create"), article_post_data)
         assert response.url == reverse("articles:index")
         article = Article.objects.first()
         assert article.author == login_user
@@ -83,6 +85,24 @@ class TestLikeArticle:
         )
         assert response.status_code == 200
         assert article in login_user.likes.all()
+
+
+class TestEditArticle:
+    def test_post(self, client, login_user, article_post_data):
+        article = ArticleFactory(author=login_user)
+        response = client.post(
+            reverse("articles:edit", args=[article.id]), article_post_data
+        )
+        article.refresh_from_db()
+
+        assert response.url == article.get_absolute_url()
+        assert article.title == "first post"
+
+    def test_post_not_author(self, client, article, login_user, article_post_data):
+        response = client.post(
+            reverse("articles:edit", args=[article.id]), article_post_data
+        )
+        assert response.status_code == 404
 
 
 class TestArticleDetail:

@@ -9,7 +9,8 @@
   <div class="flex justify-center items-center mb-3">
 
     <div class="mr-6">
-      <div class="mb-1">
+      <div class="flex items-center mb-1">
+        {% include "users/_avatar.html" with user=article.author size="32" css_class="mr-2" %}
         <a class="font-semibold text-lg hover:text-gray-100"
            href="{{ article.author.get_absolute_url }}">{{ article.author }}</a>
       </div>

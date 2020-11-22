@@ -76,10 +76,6 @@ def article_detail(request, slug):
         request.user.is_authenticated and request.user != article.author
     )
 
-    can_follow = can_like = (
-        request.user.is_authenticated and request.user != article.author
-    )
-
     can_edit = request.user.is_authenticated and request.user == article.author
 
     return TemplateResponse(

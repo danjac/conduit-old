@@ -4,12 +4,14 @@
 <div class="flex justify-center text-center items-center py-6 mb-3 mx-auto bg-gradient-to-b from-indigo-900 to-indigo-700 text-white w-full">
   <div>
 
-    <div class="flex items-center mb-6">
+    <div class="flex mb-3 justify-center">
       {% include "users/_avatar.html" with user=user_obj size="64" css_class="mr-4" %}
+    </div>
+    <div class="flex mb-3 justify-center">
       <h1 class="text-5xl">{{ user_obj.username }}</h1>
     </div>
     {% if can_follow %}
-    <div>
+    <div class="flex justify-center">
       {% if is_following %}
       <button class="rounded px-4 py-2 border hover:bg-indigo-300"
               data-controller="ajax"
