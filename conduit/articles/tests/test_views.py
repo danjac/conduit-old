@@ -1,4 +1,5 @@
 # Django
+from django.conf import settings
 from django.urls import reverse
 
 # Third Party Libraries
@@ -102,6 +103,19 @@ class TestEditArticle:
         response = client.post(
             reverse("articles:edit", args=[article.id]), article_post_data
         )
+        assert response.status_code == 404
+
+
+class TestDeleteArticle:
+    def test_post(self, client, login_user):
+        article = ArticleFactory(author=login_user)
+        response = client.post(reverse("articles:delete", args=[article.id]),)
+
+        assert response.url == settings.HOME_URL
+        assert Article.objects.count() == 0
+
+    def test_post_not_author(self, client, article, login_user):
+        response = client.post(reverse("articles:delete", args=[article.id]),)
         assert response.status_code == 404
 
 
