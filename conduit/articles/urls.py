@@ -9,6 +9,7 @@ app_name = "articles"
 urlpatterns = [
     path("", views.article_index, name="index"),
     path("follows/", views.article_index, name="follows", kwargs={"follows": True}),
+    path("tag/<slug:tag>/", views.article_index, name="tag"),
     path(
         "comments/<int:comment_id>/~delete", views.delete_comment, name="delete_comment"
     ),

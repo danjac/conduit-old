@@ -30,11 +30,22 @@ class TestArticleIndex:
         assert response.status_code == 200
         assert len(response.context["articles"].object_list) == 6
 
-    def test_get_with_selected_tag(self, client):
+    def test_get_with_tag(self, client):
         article = ArticleFactory()
         article.tags.add("red", "green", "blue")
         ArticleFactory.create_batch(5)
-        response = client.get(reverse("articles:index"), {"tag": "green"})
+        response = client.get(reverse("articles:tag", args=["green"]))
+        assert response.status_code == 200
+        assert len(response.context["articles"].object_list) == 1
+        assert response.context["articles"].object_list[0] == article
+
+    def test_get_follows(self, client, login_user):
+        article = ArticleFactory()
+        ArticleFactory.create_batch(5)
+        login_user.follows.add(article.author)
+        response = client.get(
+            reverse("articles:follows"), args=[article.author.username]
+        )
         assert response.status_code == 200
         assert len(response.context["articles"].object_list) == 1
         assert response.context["articles"].object_list[0] == article

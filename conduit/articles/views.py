@@ -16,7 +16,7 @@ from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
 
 
-def article_index(request, follows=False):
+def article_index(request, follows=False, tag=None):
     """Show list of articles"""
 
     articles = (
@@ -25,14 +25,12 @@ def article_index(request, follows=False):
 
     tags = (
         TaggedItem.objects.select_related("tag")
-        .values_list("tag__name", flat=True)
+        .values_list("tag__slug", "tag__name")
         .distinct()
     )
 
-    selected_tag = request.GET.get("tag", None)
-
-    if selected_tag:
-        articles = articles.filter(tags__name__in=[selected_tag])
+    if tag:
+        articles = articles.filter(tags__slug__in=[tag])
 
     if follows and request.user.is_authenticated:
         articles = articles.filter(author__in=request.user.follows.all())
@@ -44,7 +42,7 @@ def article_index(request, follows=False):
             "articles": paginate(request, articles),
             "tags": tags,
             "follows": follows,
-            "selected_tag": selected_tag,
+            "selected_tag": tag,
         },
     )
 
