@@ -32,7 +32,7 @@
         </div>
         <div>
           <div class="flex items-center">
-            <div class="font-semibold text-gray-500 text-lg mr-1">http://example.com/</div>
+            <div class="font-semibold text-gray-500 text-lg mr-1">http://{{ request.site.domain }}/</div>
             {% render_field form.slug class=widget_class placeholder=form.slug.label %}
           </div>
           {% include "_form_errors.html" with errors=form.slug.errors %}
