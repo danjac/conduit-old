@@ -9,3 +9,7 @@ For local development:
 Edit the environment variables as per the SAAS starter instructions.
 
     docker-compose up -d
+
+Sample app in production here:
+
+https://djsaasstarter-conduit.herokuapp.com/
