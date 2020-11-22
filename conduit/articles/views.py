@@ -6,7 +6,7 @@ from django.template.response import TemplateResponse
 from django.views.decorators.http import require_POST
 
 # Third Party Libraries
-from taggit.models import Tag
+from taggit.models import TaggedItem
 
 # Conduit
 from conduit.common.pagination import paginate
@@ -22,13 +22,14 @@ def article_index(request, follows=False):
     articles = (
         Article.objects.with_num_likes().select_related("author").order_by("-created")
     )
-    tags = Tag.objects.all()
+    tags = [item.tag.name for item in TaggedItem.objects.select_related("tag")]
 
     selected_tag = request.GET.get("tag", None)
 
     if selected_tag:
         articles = articles.filter(tags__name__in=[selected_tag])
-    elif follows and request.user.is_authenticated:
+
+    if follows and request.user.is_authenticated:
         articles = articles.filter(author__in=request.user.follows.all())
 
     return TemplateResponse(
