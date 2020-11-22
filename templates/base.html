@@ -36,7 +36,8 @@
   <header class="border-b pb-1 bg-gray-100">
     <div class="flex items-center justify-between p-2 md:px-12">
       <div class="flex items-center flex-shrink-0 mr-6 text-xl">
-        <a class="text-indigo-900 font-bold" href="{% url 'articles:index' %}">Conduit</a>
+        <a class="text-indigo-900 font-bold"
+           href="{% url 'articles:index' %}">Conduit</a>
       </div>
 
       {% if user.is_authenticated %}
@@ -47,7 +48,7 @@
           New Article
         </a>
 
-        <a href="/"
+        <a href="{% url 'users:settings' %}"
            class="inline-block mr-3">
           <i class="fa fa-cog mr-1"></i>
           Settings
@@ -86,5 +87,3 @@
 </body>
 
 </html>
-
-

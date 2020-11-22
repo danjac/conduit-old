@@ -1,4 +1,5 @@
 # Django
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -9,6 +10,9 @@ from django.views.decorators.http import require_POST
 # Conduit
 from conduit.articles.models import Article
 from conduit.common.pagination import paginate
+
+# Local
+from .forms import UserForm
 
 
 def user_detail(request, username):
@@ -39,6 +43,18 @@ def user_detail(request, username):
             "articles": paginate(request, articles),
         },
     )
+
+
+@login_required
+def user_settings(request):
+    if request.method == "POST":
+        form = UserForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect(settings.HOME_URL)
+    else:
+        form = UserForm(instance=request.user)
+    return TemplateResponse(request, "users/settings.html", {"form": form})
 
 
 @login_required

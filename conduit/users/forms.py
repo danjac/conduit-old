@@ -20,4 +20,4 @@ class UserCreationForm(BaseUserCreationForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ("name",)
+        fields = ("name", "image", "bio")

@@ -3,7 +3,11 @@
 {{ block.super }}
 <div class="flex justify-center text-center items-center py-6 mb-3 mx-auto bg-gradient-to-b from-indigo-900 to-indigo-700 text-white w-full">
   <div>
-    <h1 class="text-5xl mb-6">{{ user_obj.username }}</h1>
+
+    <div class="flex items-center mb-6">
+      {% include "users/_avatar.html" with user=user_obj size="64" css_class="mr-4" %}
+      <h1 class="text-5xl">{{ user_obj.username }}</h1>
+    </div>
     {% if can_follow %}
     <div>
       {% if is_following %}

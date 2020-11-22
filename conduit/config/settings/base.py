@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "django_extensions",
     "djcelery_email",
+    "sorl.thumbnail",
     "taggit",
     "widget_tweaks",
 ] + LOCAL_APPS

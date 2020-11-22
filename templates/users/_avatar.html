@@ -1,0 +1,17 @@
+{% load thumbnail account static %}
+{% with thumbnail_size=size|default:"32" %}
+{% thumbnail user.image thumbnail_size|add:"x"|add:thumbnail_size format="PNG" crop="center" as avatar %}
+{% user_display user as username %}
+<img src="{{ avatar.url }}"
+     width="{{ avatar.width }}"
+     height="{{ avatar.height }}"
+     alt="{{ username }}"
+     class="bg-transparent rounded-full {{ css_class }}">
+{% empty %}
+<img src="{% static 'img/smiley-cyrus.jpg' %}"
+     alt="{{ username }}"
+     height="{{ thumbnail_size }}"
+     width="{{ thumbnail_size }}"
+     class="bg-transparent rounded-full {{ css_class }}">
+{% endthumbnail %}
+{% endwith %}
