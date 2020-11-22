@@ -31,7 +31,7 @@
     {% include "_pagination.html" with page_obj=articles %}
   </div>
 
-  <div class="hidden md:block col-span-1">
+  <div class="col-span-1">
     <h2 class="text-lg mb-3 font-semibold">Popular tags</h2>
     <div class="p-3 rounded border">
       {% for slug, name in tags %}
