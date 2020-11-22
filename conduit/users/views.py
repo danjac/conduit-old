@@ -25,7 +25,6 @@ def user_detail(request, username):
     articles = (
         Article.objects.filter(author=user)
         .with_num_likes()
-        .with_is_liked(request.user)
         .select_related("author")
         .order_by("-created")
     )

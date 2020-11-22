@@ -14,15 +14,6 @@ class ArticleQuerySet(models.QuerySet):
     def with_num_likes(self):
         return self.annotate(num_likes=models.Count("likers"))
 
-    def with_is_liked(self, user):
-        if user.is_anonymous:
-            return self.annotate(
-                is_liked=models.Value(False, output_field=models.BooleanField())
-            )
-        return self.annotate(
-            is_liked=models.Exists(user.likes.filter(pk=models.OuterRef("pk")))
-        )
-
 
 class ArticleManager(models.Manager.from_queryset(ArticleQuerySet)):
     ...

@@ -59,6 +59,32 @@ class TestDeleteComment:
         assert Comment.objects.filter(pk=comment.id).exists()
 
 
+class TestLikeArticle:
+    def test_like_article(self, client, article, login_user):
+        response = client.post(reverse("articles:like", args=[article.id]))
+        assert response.url == article.get_absolute_url()
+        assert article in login_user.likes.all()
+
+    def test_unlike_article(self, client, article, login_user):
+        login_user.likes.add(article)
+        response = client.post(reverse("articles:like", args=[article.id]))
+        assert response.url == article.get_absolute_url()
+        assert article not in login_user.likes.all()
+
+    def test_like_own_article(self, client, login_user):
+        article = ArticleFactory(author=login_user)
+        response = client.post(reverse("articles:like", args=[article.id]))
+        assert response.status_code == 404
+        assert article not in login_user.likes.all()
+
+    def test_return_html_fragment(self, client, article, login_user):
+        response = client.post(
+            reverse("articles:like", args=[article.id]), HTTP_X_REQUEST_FRAGMENT=True
+        )
+        assert response.status_code == 200
+        assert article in login_user.likes.all()
+
+
 class TestArticleDetail:
     def test_not_found(self, client):
         response = client.get(reverse("articles:detail", args=["test"]))

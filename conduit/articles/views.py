@@ -20,10 +20,7 @@ def article_index(request):
     """Show list of articles"""
 
     articles = (
-        Article.objects.with_num_likes()
-        .with_is_liked(request.user)
-        .select_related("author")
-        .order_by("-created")
+        Article.objects.with_num_likes().select_related("author").order_by("-created")
     )
     tags = Tag.objects.all()
 
@@ -46,10 +43,7 @@ def article_index(request):
 def article_detail(request, slug):
 
     article = get_object_or_404(
-        Article.objects.with_num_likes()
-        .with_is_liked(request.user)
-        .select_related("author"),
-        slug=slug,
+        Article.objects.with_num_likes().select_related("author"), slug=slug,
     )
 
     comment_form = None
@@ -125,11 +119,10 @@ def like_article(request, article_id):
     else:
         request.user.likes.add(article)
 
+    print(request.headers)
     if request.headers.get("X-Request-Fragment"):
         return TemplateResponse(
-            request,
-            "articles/_like.html",
-            {"article": article, "num_likes": article.likers.count(),},
+            request, "articles/_like.html", {"num_likes": article.likers.count()},
         )
     return redirect(article)
 
