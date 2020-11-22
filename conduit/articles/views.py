@@ -76,6 +76,8 @@ def article_detail(request, slug):
         request.user.is_authenticated and request.user != article.author
     )
 
+    can_edit = request.user.is_authenticated and request.user == article.author
+
     return TemplateResponse(
         request,
         "articles/detail.html",
@@ -86,6 +88,7 @@ def article_detail(request, slug):
             "is_following": is_following,
             "can_follow": can_follow,
             "can_like": can_like,
+            "can_edit": can_edit,
         },
     )
 
@@ -108,6 +111,22 @@ def create_article(request):
 
 
 @login_required
+def edit_article(request, article_id):
+    article = get_object_or_404(Article, author=request.user, pk=article_id)
+    if request.method == "POST":
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            article = form.save()
+            messages.success(request, "Your article has been updated")
+            return redirect(article)
+    else:
+        form = ArticleForm(instance=article)
+    return TemplateResponse(
+        request, "articles/article_form.html", {"form": form, "article": article}
+    )
+
+
+@login_required
 @require_POST
 def like_article(request, article_id):
     article = get_object_or_404(
@@ -119,12 +138,20 @@ def like_article(request, article_id):
     else:
         request.user.likes.add(article)
 
-    print(request.headers)
     if request.headers.get("X-Request-Fragment"):
         return TemplateResponse(
             request, "articles/_like.html", {"num_likes": article.likers.count()},
         )
     return redirect(article)
+
+
+@login_required
+@require_POST
+def delete_article(request, article_id):
+    article = get_object_or_404(Article, author=request.user, pk=article_id)
+    article.delete()
+    messages.info(request, "Your article has been deleted")
+    return redirect("articles:index")
 
 
 @login_required

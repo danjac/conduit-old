@@ -40,9 +40,16 @@
       </div>
 
       {% endwith %}
-      <div class="flex bg-gray-100 rounded-b-lg border border-t-none p-3 justify-end">
+      <div class="flex bg-gray-100 rounded-b-lg border border-t-none p-3 justify-end items-center">
+        {% if article %}
+        <a class="text-blue-800 hover:text-blue-600 mr-3 text-lg"
+           href="{{ article.get_absolute_url }}">Cancel</a>
+        <button type="submit"
+                class="px-4 py-2 rounded bg-blue-800 text-white hover:bg-blue-600">Save Article</button>
+        {% else %}
         <button type="submit"
                 class="px-4 py-2 rounded bg-blue-800 text-white hover:bg-blue-600">Publish Article</button>
+        {% endif %}
       </div>
 
     </form>
