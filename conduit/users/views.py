@@ -55,6 +55,7 @@ def user_settings(request):
         form = UserForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
+            messages.success(request, "Your settings have been saved")
             return redirect(settings.HOME_URL)
     else:
         form = UserForm(instance=request.user)

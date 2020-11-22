@@ -30,6 +30,12 @@ class UserForm(PasswordVerificationMixin, forms.ModelForm):
         model = User
         fields = ("name", "image", "bio", "email")
 
+    def clean_password1(self):
+        password = self.cleaned_data.get("password1")
+        if password:
+            get_adapter().clean_password(password, self.instance)
+        return password
+
     def save(self):
         instance = super().save(commit=False)
         password = self.cleaned_data.get("password1")
