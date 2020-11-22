@@ -19,6 +19,17 @@ class TestUserDetailIndex:
         assert len(response.context["articles"].object_list) == 6
 
 
+class TestUserFavorites:
+    def test_get(self, client, user, login_user):
+        article = ArticleFactory(author=user)
+        login_user.likes.add(article)
+        ArticleFactory.create_batch(6, author=user)
+        response = client.get(reverse("users:favorites", args=[user.username]))
+        assert response.status_code == 200
+        assert len(response.context["articles"].object_list) == 1
+        assert response.context["articles"][0] == article
+
+
 class TestUserSettings:
     def test_post(self, client, login_user):
         response = client.post(

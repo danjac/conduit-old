@@ -15,7 +15,7 @@ from conduit.common.pagination import paginate
 from .forms import UserForm
 
 
-def user_detail(request, username):
+def user_detail(request, username, favorites=False):
 
     user = get_object_or_404(get_user_model(), username=username)
 
@@ -33,6 +33,9 @@ def user_detail(request, username):
         .order_by("-created")
     )
 
+    if favorites:
+        articles = articles.filter(num_likes__gt=0)
+
     return TemplateResponse(
         request,
         "users/detail.html",
@@ -40,6 +43,7 @@ def user_detail(request, username):
             "user_obj": user,
             "can_follow": can_follow,
             "is_following": is_following,
+            "favorites": favorites,
             "articles": paginate(request, articles),
         },
     )
