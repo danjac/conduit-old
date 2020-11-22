@@ -22,7 +22,12 @@ def article_index(request, follows=False):
     articles = (
         Article.objects.with_num_likes().select_related("author").order_by("-created")
     )
-    tags = [item.tag.name for item in TaggedItem.objects.select_related("tag")]
+
+    tags = (
+        TaggedItem.objects.select_related("tag")
+        .values_list("tag__name", flat=True)
+        .distinct()
+    )
 
     selected_tag = request.GET.get("tag", None)
 
