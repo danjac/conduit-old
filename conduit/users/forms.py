@@ -4,6 +4,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm as BaseUserChangeForm
 from django.contrib.auth.forms import UserCreationForm as BaseUserCreationForm
 
+# Third Party Libraries
+from allauth.account.adapter import get_adapter
+from allauth.account.forms import PasswordField, PasswordVerificationMixin
+
 User = get_user_model()
 
 
@@ -17,7 +21,20 @@ class UserCreationForm(BaseUserCreationForm):
         model = User
 
 
-class UserForm(forms.ModelForm):
+class UserForm(PasswordVerificationMixin, forms.ModelForm):
+
+    password1 = PasswordField(label="New Password", required=False)
+    password2 = PasswordField(label="New Password (again)", required=False)
+
     class Meta:
         model = User
-        fields = ("name", "image", "bio")
+        fields = ("name", "image", "bio", "email")
+
+    def save(self):
+        instance = super().save(commit=False)
+        password = self.cleaned_data.get("password1")
+        if password:
+            get_adapter().set_password(instance, password)
+        else:
+            instance.save()
+        return instance

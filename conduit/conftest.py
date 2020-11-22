@@ -33,7 +33,7 @@ def anonymous_user():
 
 @pytest.fixture
 def login_user(client):
-    password = "t3SzTP4sZ"
+    password = "testpass1"
     user = UserFactory()
     user.set_password(password)
     user.save()

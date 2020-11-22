@@ -27,6 +27,19 @@
           {% render_field form.bio class=widget_class placeholder=form.bio.label %}
           {% include "_form_errors.html" with errors=form.bio.errors %}
         </div>
+        <div class="mb-3">
+          {% render_field form.email class=widget_class placeholder=form.email.label %}
+          {% include "_form_errors.html" with errors=form.email.errors %}
+        </div>
+        <div class="mb-3">
+          {% render_field form.password1 class=widget_class %}
+          {% include "_form_errors.html" with errors=form.password1.errors %}
+        </div>
+        <div class="mb-3">
+          {% render_field form.password2 class=widget_class %}
+          {% include "_form_errors.html" with errors=form.password2.errors %}
+        </div>
+
       </div>
 
       {% endwith %}
