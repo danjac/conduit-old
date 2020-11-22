@@ -42,7 +42,7 @@ def article_index(request, follows=False, tag=None):
             "articles": paginate(request, articles),
             "tags": tags,
             "follows": follows,
-            "selected_tag": tag,
+            "tag": tag,
         },
     )
 
