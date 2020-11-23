@@ -1,8 +1,8 @@
 # Local
 from ..base import env
 
-DEFAULT_FILE_STORAGE = "conduit.config.aws.MediaStorage"
-STATICFILES_STORAGE = "conduit.config.aws.StaticStorage"
+DEFAULT_FILE_STORAGE = "conduit.config.storages.MediaStorage"
+STATICFILES_STORAGE = "conduit.config.storages.StaticStorage"
 
 AWS_MEDIA_LOCATION = "media"
 AWS_STATIC_LOCATION = "static"
