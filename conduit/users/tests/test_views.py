@@ -16,7 +16,7 @@ class TestUserDetailIndex:
         ArticleFactory.create_batch(6, author=user)
         response = client.get(reverse("users:detail", args=[user.username]))
         assert response.status_code == 200
-        assert len(response.context["articles"].object_list) == 6
+        assert len(response.context["articles"]) == 6
 
 
 class TestUserFavorites:
@@ -26,7 +26,7 @@ class TestUserFavorites:
         ArticleFactory.create_batch(6, author=user)
         response = client.get(reverse("users:favorites", args=[user.username]))
         assert response.status_code == 200
-        assert len(response.context["articles"].object_list) == 1
+        assert len(response.context["articles"]) == 1
         assert response.context["articles"][0] == article
 
 

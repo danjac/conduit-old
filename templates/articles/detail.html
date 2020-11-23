@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
+{% load pagination %}
 
 {% block header %}
 {{ block.super }}
@@ -172,7 +173,8 @@
     </form>
     {% endif %}
 
-    {% for comment in comments.object_list %}
+    {% paginate comments as page_obj %}
+    {% for comment in page_obj.object_list %}
     <div class="border rounded mb-3">
       <div class="p-3">{{ comment.as_markdown }}</div>
 
@@ -198,7 +200,7 @@
 
     </div>
     {% endfor %}
-    {% include "_pagination.html" with page_obj=comments %}
+    {% include "_pagination.html" %}
   </div>
 </div>
 {% endblock content %}

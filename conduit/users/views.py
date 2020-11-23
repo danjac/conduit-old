@@ -9,7 +9,6 @@ from django.views.decorators.http import require_POST
 
 # Conduit
 from conduit.articles.models import Article
-from conduit.common.pagination import paginate
 
 # Local
 from .forms import UserForm
@@ -44,7 +43,7 @@ def user_detail(request, username, favorites=False):
             "can_follow": can_follow,
             "is_following": is_following,
             "favorites": favorites,
-            "articles": paginate(request, articles),
+            "articles": articles,
         },
     )
 

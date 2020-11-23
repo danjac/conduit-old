@@ -8,9 +8,6 @@ from django.views.decorators.http import require_POST
 # Third Party Libraries
 from taggit.models import TaggedItem
 
-# Conduit
-from conduit.common.pagination import paginate
-
 # Local
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
@@ -38,12 +35,7 @@ def article_index(request, follows=False, tag=None):
     return TemplateResponse(
         request,
         "articles/index.html",
-        {
-            "articles": paginate(request, articles),
-            "tags": tags,
-            "follows": follows,
-            "tag": tag,
-        },
+        {"articles": articles, "tags": tags, "follows": follows, "tag": tag,},
     )
 
 
@@ -87,7 +79,7 @@ def article_detail(request, slug):
         {
             "article": article,
             "comment_form": comment_form,
-            "comments": paginate(request, comments),
+            "comments": comments,
             "is_following": is_following,
             "can_follow": can_follow,
             "can_like": can_like,

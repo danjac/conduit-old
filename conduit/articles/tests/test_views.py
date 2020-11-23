@@ -28,7 +28,7 @@ class TestArticleIndex:
         ArticleFactory.create_batch(6)
         response = client.get(reverse("articles:index"))
         assert response.status_code == 200
-        assert len(response.context["articles"].object_list) == 6
+        assert len(response.context["articles"]) == 6
 
     def test_get_with_tag(self, client):
         article = ArticleFactory()
@@ -36,8 +36,8 @@ class TestArticleIndex:
         ArticleFactory.create_batch(5)
         response = client.get(reverse("articles:tag", args=["green"]))
         assert response.status_code == 200
-        assert len(response.context["articles"].object_list) == 1
-        assert response.context["articles"].object_list[0] == article
+        assert len(response.context["articles"]) == 1
+        assert response.context["articles"][0] == article
 
     def test_get_follows(self, client, login_user):
         article = ArticleFactory()
@@ -47,8 +47,8 @@ class TestArticleIndex:
             reverse("articles:follows"), args=[article.author.username]
         )
         assert response.status_code == 200
-        assert len(response.context["articles"].object_list) == 1
-        assert response.context["articles"].object_list[0] == article
+        assert len(response.context["articles"]) == 1
+        assert response.context["articles"][0] == article
 
 
 class TestCreateArticle:
@@ -140,7 +140,7 @@ class TestArticleDetail:
         response = client.get(reverse("articles:detail", args=[article.slug]))
         assert response.status_code == 200
         assert response.context["article"] == article
-        assert len(response.context["comments"].object_list) == 6
+        assert len(response.context["comments"]) == 6
 
     def test_not_authenticated(self, client, article):
         response = client.get(reverse("articles:detail", args=[article.slug]))
