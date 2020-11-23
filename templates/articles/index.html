@@ -26,7 +26,7 @@
       </a>
     </div>
     {% endif %}
-    {% paginate articles as page_obj %>}
+    {% paginate articles as page_obj %}
     {% for article in page_obj.object_list %}
     {% include "articles/_article.html" %}
     {% endfor %}
