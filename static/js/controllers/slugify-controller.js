@@ -4,7 +4,6 @@ export default class extends Controller {
   static targets = ['field'];
 
   slugify(event) {
-    console.log('slugify!!!');
     this.fieldTarget.value = event.currentTarget.value
       .toString()
       .toLowerCase()
