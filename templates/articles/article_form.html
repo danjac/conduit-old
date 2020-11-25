@@ -9,10 +9,11 @@
           data-action="form#submit"
           class="rounded border bg-white mb-3"
           method="post"
-          action="{{ request.path }}">
+          action="{{ request.path }}"
+          novalidate>
       {% include "_form_errors.html" with errors=form.non_field_errors %}
       {% csrf_token %}
-      {% with WIDGET_ERROR_CLASS="text-red-800" widget_class="appearance-none text-lg rounded p-3 border w-full" %}
+      {% with WIDGET_ERROR_CLASS="text-red-800 placeholder-red-800 border-red-800 focus:ring-red-200" widget_class="appearance-none text-lg rounded p-3 border w-full focus:outline-none focus:ring-2 placeholder-opacity-50" %}
       <div class="p-3 mb-3">
         <div class="mb-3">
           {% render_field form.title class=widget_class placeholder=form.title.label %}
