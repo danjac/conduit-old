@@ -5,7 +5,7 @@
 <div class="flex justify-center items-center">
   <div class="w-full lg:w-2/3">
 
-    <form data-controller="form"
+    <form data-controller="form slugify"
           data-action="form#submit"
           class="rounded border bg-white mb-3"
           method="post"
@@ -16,7 +16,7 @@
       {% with WIDGET_ERROR_CLASS="form-input-error" widget_class="form-input text-lg p-2 w-full" %}
       <div class="p-3 mb-3">
         <div class="mb-3">
-          {% render_field form.title class=widget_class placeholder=form.title.label %}
+          {% render_field form.title|set_data:"action:keyup->slugify#slugify" class=widget_class placeholder=form.title.label  %}
           {% include "_form_errors.html" with errors=form.title.errors %}
         </div>
         <div class="mb-3">
@@ -34,7 +34,7 @@
         <div>
           <div class="flex items-center">
             <div class="font-semibold text-gray-500 text-lg mr-1">http://{{ request.site.domain }}/</div>
-            {% render_field form.slug class=widget_class placeholder=form.slug.label %}
+            {% render_field form.slug|set_data:"target:slugify.field" class=widget_class placeholder=form.slug.label %}
           </div>
           {% include "_form_errors.html" with errors=form.slug.errors %}
         </div>
