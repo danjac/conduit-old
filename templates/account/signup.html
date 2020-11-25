@@ -12,7 +12,7 @@
           action="{% url 'account_signup' %}">
       {% include "_form_errors.html" with errors=form.non_field_errors %}
       {% csrf_token %}
-      {% with WIDGET_ERROR_CLASS="text-red-800 border-red-800" widget_class="appearance-none text-lg rounded p-3 border w-full" %}
+      {% with WIDGET_ERROR_CLASS="form-input-error" widget_class="form-input text-lg p-2 w-full" %}
       <div class="mb-3">
         {% render_field form.email class=widget_class %}
         {% include "_form_errors.html" with errors=form.email.errors %}
