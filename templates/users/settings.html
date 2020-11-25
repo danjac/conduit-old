@@ -27,7 +27,7 @@
         </div>
         <div class="mb-3">
           <label for="{{ form.image.id_for_label }}"
-                 class="mb-2 text-lg{% if form.errors %} text-red-800{% endif %}">
+                 class="block mb-2 text-lg{% if form.errors %} text-red-800{% endif %}">
             Avatar
           </label>
           {% render_field form.image class=widget_class accept="image/*" %}
