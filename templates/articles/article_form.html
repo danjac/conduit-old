@@ -22,7 +22,7 @@
         <div class="mb-3">
           <div class="flex items-center">
             <div class="font-semibold text-gray-500 text-lg mr-1">http://{{ request.site.domain }}/</div>
-            {% render_field form.slug|set_data:"target:slugify.field" class=widget_class placeholder=form.slug.label %}
+            {% render_field form.slug|set_data:"slugify-target:field" class=widget_class placeholder=form.slug.label %}
           </div>
           {% include "_form_errors.html" with errors=form.slug.errors %}
         </div>

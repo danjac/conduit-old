@@ -14,10 +14,10 @@
     <button class="rounded border p-2 text-sm hover:bg-gray-100 focus:outline-none"
             data-controller="ajax"
             data-controller="ajax"
-            data-ajax-url="{% url 'articles:like' article.id %}"
-            data-ajax-replace
+            data-ajax-url-value="{% url 'articles:like' article.id %}"
+            data-ajax-replace-value
             data-action="ajax#post">
-      <span data-target="ajax.fragment">
+      <span data-fragment-target="fragment">
         {% include "articles/_like.html" with num_likes=article.num_likes %}
       </span>
     </button>

@@ -17,14 +17,14 @@
       <button class="rounded px-4 py-2 border hover:bg-indigo-300"
               data-controller="ajax"
               data-action="ajax#post"
-              data-ajax-url="{% url 'users:unfollow' user_obj.id %}">
+              data-ajax-url-value="{% url 'users:unfollow' user_obj.id %}">
         <i class="fa fa-plus mr-1"></i> Unfollow {{ article.author }}
       </button>
       {% else %}
       <button class="rounded px-4 py-2 border hover:bg-indigo-300"
               data-controller="ajax"
               data-action="ajax#post"
-              data-ajax-url="{% url 'users:follow' user_obj.id %}">
+              data-ajax-url-value="{% url 'users:follow' user_obj.id %}">
         <i class="fa fa-plus mr-1"></i> Follow {{ article.author }}
       </button>
       {% endif %}
