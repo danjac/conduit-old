@@ -1,4 +1,7 @@
-{% extends "base.html" %} {% load pagination %} {% block header %} {{ block.super }}
+{% extends "base.html" %}
+{% load pagination %}
+{% block header %}
+{{ block.super }}
 <div
   class="flex justify-center text-center items-center py-6 mb-3 mx-auto bg-gradient-to-b from-indigo-900 to-indigo-700 text-white w-full"
 >
@@ -10,15 +13,14 @@
       <h1 class="text-5xl">{{ user_obj.username }}</h1>
     </div>
     {% if can_follow %}
-    <div class="flex justify-center">
-      <turbo-frame id="follow">
+    <div class="flex justify-center" id="follow-header">
         {% include "users/_follow.html" %}
-      </turbo-frame>
     </div>
     {% endif %}
   </div>
 </div>
-{% endblock header %} {% block content %}
+{% endblock header %}
+{% block content %}
 <div class="border-b flex items-center mb-3">
   <a
     href="{% url 'users:detail' user_obj.username %}"
@@ -34,6 +36,9 @@
   </a>
 </div>
 
-{% paginate articles as page_obj %} {% for article in page_obj.object_list %} {% include
-"articles/_article.html" %} {% endfor %} {% include "_pagination.html" %} {% endblock
-content %}
+{% paginate articles as page_obj %}
+{% for article in page_obj.object_list %}
+{% include "articles/_article.html" %}
+{% endfor %}
+{% include "_pagination.html" %}
+{% endblock content %}

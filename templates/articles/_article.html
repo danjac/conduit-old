@@ -2,8 +2,7 @@
   <div class="flex items-center justify-between mb-3">
     <div class="">
       <div class="flex items-center mb-1">
-        {% include "users/_avatar.html" with user=article.author size="32"
-        css_class="mr-2" %}
+        {% include "users/_avatar.html" with user=article.author size="32" css_class="mr-2" %}
         <a
           class="font-semibold text-lg text-blue-800 hover:text-blue-600"
           href="{{ article.author.get_absolute_url }}"
@@ -13,8 +12,9 @@
       <div class="text-gray-500 text-sm">{{ article.created|date }}</div>
     </div>
 
-    {% if request.user.is_authenticated and request.user != article.author %} {% include
-    "articles/_like.html" with num_likes=article.num_likes can_like=True %} {% else %}
+    {% if request.user.is_authenticated and request.user != article.author %}
+    {% include "articles/_like.html" with num_likes=article.num_likes can_like=True %}
+    {% else %}
     {% include "articles/_like.html" with num_likes=article.num_likes can_like=False %}
     {% endif %}
   </div>

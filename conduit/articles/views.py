@@ -1,6 +1,7 @@
 # Django
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import StreamingHttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.views.decorators.http import require_POST
@@ -9,6 +10,7 @@ from django.views.decorators.http import require_POST
 from taggit.models import TaggedItem
 
 # Conduit
+from conduit.common.turbo import render_turbo_stream_to_string
 from conduit.common.turbo.response import (
     TurboStreamRemoveResponse,
     TurboStreamTemplateResponse,
@@ -153,18 +155,22 @@ def like_article(request, article_id):
     else:
         request.user.likes.add(article)
 
-    target = request.POST.get("target")
+    context = {"num_likes": article.likers.count()}
 
-    if target:
-        return TurboStreamTemplateResponse(
-            request,
-            "articles/_likes_counter.html",
-            {"num_likes": article.likers.count},
-            target=target,
-            action="update",
-        )
+    def render_likes():
 
-    return redirect(article)
+        for target in [
+            f"article-likes-{article.id}",
+            "article-likes-header",
+            "article-likes-body",
+        ]:
+            yield render_turbo_stream_to_string(
+                "articles/_likes_counter.html", context, target=target, action="update"
+            )
+
+    return StreamingHttpResponse(
+        render_likes(), content_type="text/html; turbo-stream;"
+    )
 
 
 @login_required

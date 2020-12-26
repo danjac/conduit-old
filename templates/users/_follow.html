@@ -1,8 +1,8 @@
 <form
   method="post"
-  action="{% if is_following %}{% url 'users:unfollow' user_obj.id %}{% else %}{% url 'users:follow' user_obj.id %}{% endif %}"
->
-  {% csrf_token %} {% if is_following %}
+  action="{% if is_following %}{% url 'users:unfollow' user_obj.id %}{% else %}{% url 'users:follow' user_obj.id %}{% endif %}">
+  {% csrf_token %}
+  {% if is_following %}
   <button class="rounded px-4 py-2 border hover:bg-indigo-300">
     <i class="fa fa-plus mr-1"></i> Unfollow {{ article.author }}
   </button>

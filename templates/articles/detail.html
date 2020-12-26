@@ -38,14 +38,14 @@
     {% endif %}
 
     {% if can_follow %}
-    <div class="mb-3 md:mr-6 md:mb-0">
+    <div class="mb-3 md:mr-6 md:mb-0" id="follow-header">
       {% include "users/_follow.html" with user_obj=article.author %}
     </div>
     {% endif %}
 
     {% if can_like %}
     <div class="md:mr-6">
-      {% include "articles/_detail_like.html" with num_likes=article.num_likes %}
+      {% include "articles/_detail_like.html" with num_likes=article.num_likes dom_id="article-likes-header" %}
     </div>
     {% endif %}
   </div>
@@ -72,14 +72,14 @@
   </div>
 
   {% if can_follow %}
-  <div class="mb-3 md:mr-6 md:mb-0">
+  <div class="mb-3 md:mr-6 md:mb-0" id="follow-body">
     {% include "users/_follow.html" with user_obj=article.author %}
   </div>
   {% endif %}
 
   {% if can_like %}
   <div>
-    {% include "articles/_detail_like.html" with num_likes=article.num_likes %}
+    {% include "articles/_detail_like.html" with num_likes=article.num_likes dom_id="article-likes-body" %}
   </div>
   {% endif %}
 

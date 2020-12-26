@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.http import StreamingHttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.utils import timezone
@@ -13,8 +14,8 @@ from django.views.decorators.http import require_POST
 
 # Conduit
 from conduit.articles.models import Article
+from conduit.common.turbo import render_turbo_stream_to_string
 from conduit.common.turbo.response import (
-    TurboFrameTemplateResponse,
     TurboStreamRemoveResponse,
     TurboStreamTemplateResponse,
 )
@@ -84,13 +85,7 @@ def follow(request, user_id):
         get_user_model().objects.exclude(pk=request.user.id), pk=user_id
     )
     request.user.follows.add(user)
-
-    return TurboFrameTemplateResponse(
-        request,
-        "users/_follow.html",
-        {"user_obj": user, "is_following": True},
-        dom_id="follow",
-    )
+    return render_follows_response(request, user, is_following=True)
 
 
 @login_required
@@ -98,13 +93,7 @@ def follow(request, user_id):
 def unfollow(request, user_id):
     user = get_object_or_404(request.user.follows.all(), pk=user_id)
     request.user.follows.remove(user)
-
-    return TurboFrameTemplateResponse(
-        request,
-        "users/_follow.html",
-        {"user_obj": user, "is_following": False},
-        dom_id="follow",
-    )
+    return render_follows_response(request, user, is_following=False)
 
 
 @require_POST
@@ -117,3 +106,23 @@ def accept_cookies(request):
         samesite="Lax",
     )
     return response
+
+
+def render_follows_response(request, user, is_following):
+
+    context = {"user_obj": user, "is_following": is_following}
+
+    def render():
+        for target in [
+            "follow-header",
+            "follow-body",
+        ]:
+            yield render_turbo_stream_to_string(
+                "users/_follow.html",
+                context,
+                target=target,
+                action="update",
+                request=request,
+            )
+
+    return StreamingHttpResponse(render(), content_type="text/html; turbo-stream;")
