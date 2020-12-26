@@ -11,7 +11,7 @@ from taggit.models import TaggedItem
 # Conduit
 from conduit.common.turbo import render_turbo_stream
 from conduit.common.turbo.response import (
-    TurboStreamRemoveResponse,
+    TurboStreamResponse,
     TurboStreamStreamingResponse,
     TurboStreamTemplateResponse,
 )
@@ -187,4 +187,4 @@ def delete_comment(request, comment_id):
         pk=comment_id,
     )
     comment.delete()
-    return TurboStreamRemoveResponse(f"comment-{comment_id}")
+    return TurboStreamResponse(action="remove", target=f"comment-{comment_id}")

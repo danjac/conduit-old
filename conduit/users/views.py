@@ -15,7 +15,7 @@ from django.views.decorators.http import require_POST
 from conduit.articles.models import Article
 from conduit.common.turbo import render_turbo_stream_template_to_string
 from conduit.common.turbo.response import (
-    TurboStreamRemoveResponse,
+    TurboStreamResponse,
     TurboStreamStreamingResponse,
     TurboStreamTemplateResponse,
 )
@@ -98,7 +98,7 @@ def unfollow(request, user_id):
 
 @require_POST
 def accept_cookies(request):
-    response = TurboStreamRemoveResponse("accept-cookies")
+    response = TurboStreamResponse(action="remove", target="accept-cookies")
     response.set_cookie(
         "accept-cookies",
         value="true",
