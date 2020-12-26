@@ -8,6 +8,12 @@ from django.views.decorators.http import require_POST
 # Third Party Libraries
 from taggit.models import TaggedItem
 
+# Conduit
+from conduit.common.turbo.response import (
+    TurboStreamRemoveResponse,
+    TurboStreamTemplateResponse,
+)
+
 # Local
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
@@ -100,6 +106,13 @@ def create_article(request):
             form.save_m2m()
             messages.success(request, "Your article has been published!")
             return redirect("articles:index")
+        return TurboStreamTemplateResponse(
+            request,
+            "articles/_article_form.html",
+            {"form": form},
+            target="article-form",
+            action="update",
+        )
     else:
         form = ArticleForm()
     return TemplateResponse(request, "articles/article_form.html", {"form": form})
@@ -114,6 +127,13 @@ def edit_article(request, article_id):
             article = form.save()
             messages.success(request, "Your article has been updated")
             return redirect(article)
+        return TurboStreamTemplateResponse(
+            request,
+            "articles/_article_form.html",
+            {"form": form},
+            target="article-form",
+            action="update",
+        )
     else:
         form = ArticleForm(instance=article)
     return TemplateResponse(
@@ -133,10 +153,17 @@ def like_article(request, article_id):
     else:
         request.user.likes.add(article)
 
-    if request.headers.get("X-Request-Fragment"):
-        return TemplateResponse(
-            request, "articles/_like.html", {"num_likes": article.likers.count()},
+    target = request.POST.get("target")
+
+    if target:
+        return TurboStreamTemplateResponse(
+            request,
+            "articles/_likes_counter.html",
+            {"num_likes": article.likers.count},
+            target=target,
+            action="update",
         )
+
     return redirect(article)
 
 
@@ -158,5 +185,4 @@ def delete_comment(request, comment_id):
         pk=comment_id,
     )
     comment.delete()
-    messages.info(request, "Your comment has been deleted")
-    return redirect(comment.article)
+    return TurboStreamRemoveResponse(f"comment-{comment_id}")

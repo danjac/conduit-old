@@ -1,30 +1,21 @@
-<div class="border-b pb-3 mb-3"
-     id="article-{{ article.id }}">
+<div class="border-b pb-3 mb-3" id="article-{{ article.id }}">
   <div class="flex items-center justify-between mb-3">
     <div class="">
       <div class="flex items-center mb-1">
-        {% include "users/_avatar.html" with user=article.author size="32" css_class="mr-2" %}
-        <a class="font-semibold text-lg text-blue-800 hover:text-blue-600"
-           href="{{ article.author.get_absolute_url }}">{{ article.author }}</a>
+        {% include "users/_avatar.html" with user=article.author size="32"
+        css_class="mr-2" %}
+        <a
+          class="font-semibold text-lg text-blue-800 hover:text-blue-600"
+          href="{{ article.author.get_absolute_url }}"
+          >{{ article.author }}</a
+        >
       </div>
       <div class="text-gray-500 text-sm">{{ article.created|date }}</div>
     </div>
 
-    {% if request.user.is_authenticated and request.user != article.author %}
-    <button class="rounded border p-2 text-sm hover:bg-gray-100 focus:outline-none"
-            data-controller="ajax"
-            data-controller="ajax"
-            data-ajax-url-value="{% url 'articles:like' article.id %}"
-            data-ajax-replace-value
-            data-action="ajax#post">
-      <span data-fragment-target="fragment">
-        {% include "articles/_like.html" with num_likes=article.num_likes %}
-      </span>
-    </button>
-    {% else %}
-    <div class="rounded border p-2 text-sm">
-      {% include "articles/_like.html" with num_likes=article.num_likes %}
-    </div>
+    {% if request.user.is_authenticated and request.user != article.author %} {% include
+    "articles/_like.html" with num_likes=article.num_likes can_like=True %} {% else %}
+    {% include "articles/_like.html" with num_likes=article.num_likes can_like=False %}
     {% endif %}
   </div>
   <div class="mb-3">
@@ -34,7 +25,10 @@
     <div class="text-sm text-gray-500 mb-3">
       {{ article.description|truncatechars:100 }}
     </div>
-    <a href="{{ article.get_absolute_url }}"
-       class="text-sm text-blue-800 hover:text-blue-600">Read more...</a>
+    <a
+      href="{{ article.get_absolute_url }}"
+      class="text-sm text-blue-800 hover:text-blue-600"
+      >Read more...</a
+    >
   </div>
 </div>

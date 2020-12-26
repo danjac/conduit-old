@@ -1,3 +1,6 @@
+# Standard Library
+import datetime
+
 # Django
 from django.conf import settings
 from django.contrib import messages
@@ -5,10 +8,16 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 # Conduit
 from conduit.articles.models import Article
+from conduit.common.turbo.response import (
+    TurboFrameTemplateResponse,
+    TurboStreamRemoveResponse,
+    TurboStreamTemplateResponse,
+)
 
 # Local
 from .forms import UserForm
@@ -56,6 +65,13 @@ def user_settings(request):
             form.save()
             messages.success(request, "Your settings have been saved")
             return redirect(settings.HOME_URL)
+        return TurboStreamTemplateResponse(
+            request,
+            "users/_settings_form.html",
+            {"form": form},
+            target="settings-form",
+            action="update",
+        )
     else:
         form = UserForm(instance=request.user)
     return TemplateResponse(request, "users/settings.html", {"form": form})
@@ -68,8 +84,13 @@ def follow(request, user_id):
         get_user_model().objects.exclude(pk=request.user.id), pk=user_id
     )
     request.user.follows.add(user)
-    messages.success(request, f"You are now following {user}")
-    return redirect(user)
+
+    return TurboFrameTemplateResponse(
+        request,
+        "users/_follow.html",
+        {"user_obj": user, "is_following": True},
+        dom_id="follow",
+    )
 
 
 @login_required
@@ -77,5 +98,22 @@ def follow(request, user_id):
 def unfollow(request, user_id):
     user = get_object_or_404(request.user.follows.all(), pk=user_id)
     request.user.follows.remove(user)
-    messages.info(request, f"You have stopped following {user}")
-    return redirect(user)
+
+    return TurboFrameTemplateResponse(
+        request,
+        "users/_follow.html",
+        {"user_obj": user, "is_following": False},
+        dom_id="follow",
+    )
+
+
+@require_POST
+def accept_cookies(request):
+    response = TurboStreamRemoveResponse("accept-cookies")
+    response.set_cookie(
+        "accept-cookies",
+        value="true",
+        expires=timezone.now() + datetime.timedelta(days=30),
+        samesite="Lax",
+    )
+    return response
