@@ -69,8 +69,7 @@ class TestUserSettings:
 
 class TestUserFollow:
     def test_post(self, client, login_user, user):
-        response = client.post(reverse("users:follow", args=[user.id]))
-        assert response.url == user.get_absolute_url()
+        client.post(reverse("users:follow", args=[user.id]))
         assert user in login_user.follows.all()
 
     def test_post_follow_self(self, client, login_user):
@@ -81,8 +80,7 @@ class TestUserFollow:
 class TestUserUnfollow:
     def test_post(self, client, login_user, user):
         login_user.follows.add(user)
-        response = client.post(reverse("users:unfollow", args=[user.id]))
-        assert response.url == user.get_absolute_url()
+        client.post(reverse("users:unfollow", args=[user.id]))
         assert user not in login_user.follows.all()
 
     def test_post_not_following(self, client, login_user, user):

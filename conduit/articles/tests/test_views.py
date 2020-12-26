@@ -63,8 +63,7 @@ class TestCreateArticle:
 class TestDeleteComment:
     def test_post_author(self, client, login_user):
         comment = CommentFactory(author=login_user)
-        response = client.post(reverse("articles:delete_comment", args=[comment.id]))
-        assert response.url == comment.article.get_absolute_url()
+        client.post(reverse("articles:delete_comment", args=[comment.id]))
         assert not Comment.objects.filter(pk=comment.id).exists()
 
     def test_post_not_author(self, client, comment, login_user):
@@ -75,14 +74,12 @@ class TestDeleteComment:
 
 class TestLikeArticle:
     def test_like_article(self, client, article, login_user):
-        response = client.post(reverse("articles:like", args=[article.id]))
-        assert response.url == article.get_absolute_url()
+        client.post(reverse("articles:like", args=[article.id]))
         assert article in login_user.likes.all()
 
     def test_unlike_article(self, client, article, login_user):
         login_user.likes.add(article)
-        response = client.post(reverse("articles:like", args=[article.id]))
-        assert response.url == article.get_absolute_url()
+        client.post(reverse("articles:like", args=[article.id]))
         assert article not in login_user.likes.all()
 
     def test_like_own_article(self, client, login_user):
