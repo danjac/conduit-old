@@ -1,5 +1,5 @@
-{% load socialaccount %} {% get_providers as socialaccount_providers %} {% if
-socialaccount_providers %}
+ {% load socialaccount %} {% get_providers as socialaccount_providers %}
+{% if socialaccount_providers %}
 <div class="{{ css_class|default:'' }}">
   <span class="mr-1">Login or signup through</span>
   {% include "socialaccount/snippets/provider_list.html" with process="login" %}

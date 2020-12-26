@@ -6,7 +6,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.http import StreamingHttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.utils import timezone
@@ -17,6 +16,7 @@ from conduit.articles.models import Article
 from conduit.common.turbo import render_turbo_stream_template_to_string
 from conduit.common.turbo.response import (
     TurboStreamRemoveResponse,
+    TurboStreamStreamingResponse,
     TurboStreamTemplateResponse,
 )
 
@@ -125,4 +125,4 @@ def render_follows_response(request, user, is_following):
                 request=request,
             )
 
-    return StreamingHttpResponse(render(), content_type="text/html; turbo-stream;")
+    return TurboStreamStreamingResponse(render())

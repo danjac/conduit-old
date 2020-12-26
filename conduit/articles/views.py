@@ -1,7 +1,6 @@
 # Django
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import StreamingHttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.views.decorators.http import require_POST
@@ -13,6 +12,7 @@ from taggit.models import TaggedItem
 from conduit.common.turbo import render_turbo_stream
 from conduit.common.turbo.response import (
     TurboStreamRemoveResponse,
+    TurboStreamStreamingResponse,
     TurboStreamTemplateResponse,
 )
 
@@ -166,9 +166,7 @@ def like_article(request, article_id):
         ]:
             yield render_turbo_stream(target=target, action="update", content=num_likes)
 
-    return StreamingHttpResponse(
-        render_likes(), content_type="text/html; turbo-stream;"
-    )
+    return TurboStreamStreamingResponse(render_likes())
 
 
 @login_required
