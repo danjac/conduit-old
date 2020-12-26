@@ -14,7 +14,7 @@ from django.views.decorators.http import require_POST
 
 # Conduit
 from conduit.articles.models import Article
-from conduit.common.turbo import render_turbo_stream_to_string
+from conduit.common.turbo import render_turbo_stream_template_to_string
 from conduit.common.turbo.response import (
     TurboStreamRemoveResponse,
     TurboStreamTemplateResponse,
@@ -117,7 +117,7 @@ def render_follows_response(request, user, is_following):
             "follow-header",
             "follow-body",
         ]:
-            yield render_turbo_stream_to_string(
+            yield render_turbo_stream_template_to_string(
                 "users/_follow.html",
                 context,
                 target=target,

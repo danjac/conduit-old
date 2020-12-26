@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from taggit.models import TaggedItem
 
 # Conduit
-from conduit.common.turbo import render_turbo_stream_to_string
+from conduit.common.turbo import render_turbo_stream
 from conduit.common.turbo.response import (
     TurboStreamRemoveResponse,
     TurboStreamTemplateResponse,
@@ -155,7 +155,7 @@ def like_article(request, article_id):
     else:
         request.user.likes.add(article)
 
-    context = {"num_likes": article.likers.count()}
+    num_likes = article.likers.count()
 
     def render_likes():
 
@@ -164,9 +164,7 @@ def like_article(request, article_id):
             "article-likes-header",
             "article-likes-body",
         ]:
-            yield render_turbo_stream_to_string(
-                "articles/_likes_counter.html", context, target=target, action="update"
-            )
+            yield render_turbo_stream(target=target, action="update", content=num_likes)
 
     return StreamingHttpResponse(
         render_likes(), content_type="text/html; turbo-stream;"
